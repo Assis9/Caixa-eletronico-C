@@ -16,7 +16,7 @@ typedef struct
     SituacaoConta situacao;
 } Conta;
  
-/* Abre o arquivo; se ainda nao existir, cria. */
+
 FILE *abrirArquivo(void)
 {
     FILE *arquivo = fopen("contas.dat", "rb+");
@@ -27,11 +27,7 @@ FILE *abrirArquivo(void)
     return arquivo;
 }
  
-/*
- * Procura a conta no arquivo.
- * Se achar: copia os dados para *conta, deixa o cursor no INICIO
- * do registro e retorna 1. Se nao achar, retorna 0.
- */
+
 int buscarConta(FILE *arquivo, long numeroConta, Conta *conta)
 {
     Conta lida;
@@ -49,7 +45,7 @@ int buscarConta(FILE *arquivo, long numeroConta, Conta *conta)
     return 0;
 }
  
-/* Sobrescreve no arquivo o registro da conta. Retorna 1 se deu certo. */
+
 int atualizarConta(FILE *arquivo, const Conta *conta)
 {
     Conta temp;
@@ -58,7 +54,7 @@ int atualizarConta(FILE *arquivo, const Conta *conta)
     {
         return 0;
     }
-    /* o cursor ja esta no inicio do registro */
+   
     if (fwrite(conta, sizeof(Conta), 1, arquivo) != 1)
     {
         return 0;
@@ -142,7 +138,6 @@ void consultarConta(void)
     fclose(arquivo);
 }
  
-/* Retorna 1 se depositou, 0 se nao foi possivel */
 int depositar(long numeroConta, double valor)
 {
     Conta conta;
@@ -180,7 +175,6 @@ int depositar(long numeroConta, double valor)
     return 1;
 }
  
-/* Retorna 1 se sacou, 0 se nao foi possivel */
 int sacar(long numeroConta, double valor)
 {
     Conta conta;
@@ -224,10 +218,7 @@ int sacar(long numeroConta, double valor)
     return 1;
 }
  
-/*
- * Transferencia = saque na origem + deposito no destino.
- * Antes de mexer em qualquer saldo, confere se tudo e valido.
- */
+
 int transferir(long contaOrigem, long contaDestino, double valor)
 {
     Conta origem, destino;
@@ -251,7 +242,7 @@ int transferir(long contaOrigem, long contaDestino, double valor)
         return 0;
     }
  
-    /* Verificacoes (nada e alterado aqui) */
+   
     if (buscarConta(arquivo, contaOrigem, &origem) == 0)
     {
         printf("Conta de origem nao encontrada.\n");
@@ -277,14 +268,14 @@ int transferir(long contaOrigem, long contaDestino, double valor)
         return 0;
     }
  
-    /* Tudo certo: executa as duas operacoes */
+   
     if (sacar(contaOrigem, valor) == 0)
     {
         return 0;
     }
     if (depositar(contaDestino, valor) == 0)
     {
-        depositar(contaOrigem, valor); /* devolve o dinheiro */
+        depositar(contaOrigem, valor);
         return 0;
     }
     return 1;
@@ -340,7 +331,7 @@ void listarContas(void)
     fclose(arquivo);
 }
  
-/* Retorna 1 se encerrou, 0 se nao foi possivel */
+
 int encerrarConta(long numeroConta)
 {
     Conta conta;
